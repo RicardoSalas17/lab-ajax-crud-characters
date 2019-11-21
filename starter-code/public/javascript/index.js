@@ -71,14 +71,38 @@ window.addEventListener('load', () => {
 		const deleted = await charactersAPI.deleteOneRegister(id);
 	});
 
-	document.getElementById('edit-character-form').addEventListener('submit', async function(event) {
-		const id = document.querySelector('[name = cartoonUpdate]').value;
-		const name = document.querySelector('[name = name]').value;
-		const occupation = document.querySelector('[name = occupation]').value;
-		const weapon = document.querySelector('[name = weapon]').value;
-		const cartoon = document.querySelector('[name = cartoonCreate]').value;
 
-		const update = charactersAPI.updateOneRegister(id, name, occupation, weapon, cartoon);
+
+	    // Buscamos el personaje por su id para obtener los valores actuales
+		document.querySelector('#buscar-personaje').onclick = () => {
+			// obtener el valor del input #characterId
+
+			const id = Number (document.querySelector('#edit-character-form input').value)
+			//una vez que obtenemos el id del input buscamos al personaje para obtener los valores previos
+			charactersService(`/characters/${id}`)
+			  .then(({ data: { name, occupation, weapon, cartoon  } }) => {
+				// una vez que la api nos responde con los valores los colocamos como valor dentro de los inputs para editar la información
+				
+				document.querySelector('#edit-character-form input[name = name]').value = name;
+				document.querySelector('#edit-character-form input[name = occupation]').value = occupation;
+				document.querySelector('#edit-character-form input[name = weapon]').value = weapon;
+				document.querySelector('#edit-character-form input[name = cartoonUpdate]').value = cartoon;
+			  })
+		  }
+
+
+
+
+
+	document.getElementById('edit-character-form').addEventListener('submit', async function(event) {
+
+		const id = document.querySelector('#edit-character-form input').value;
+		const name = document.querySelector('#edit-character-form input[name = name]').value;
+		const occupation = document.querySelector('#edit-character-form input[name = occupation]').value;
+		const weapon = document.querySelector('#edit-character-form input[name = weapon]').value;
+		const cartoon = document.querySelector('#edit-character-form input[name = cartoonUpdate]').value;
+
+		const update = await charactersAPI.updateOneRegister(id, name, occupation, weapon, cartoon);
 	});
 
 	document.getElementById('new-character-form').addEventListener('submit', function(event) {

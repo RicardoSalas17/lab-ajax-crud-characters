@@ -19,7 +19,8 @@ class APIHandler {
 	}
 
 	updateOneRegister(id, name, occupation, weapon, cartoon) {
-		return this.charactersService.patch('characters/');
+		console.log(id, name, occupation, weapon, cartoon)
+		return this.charactersService.patch(`characters/${id}`);
 	}
 
 	deleteOneRegister(id) {
